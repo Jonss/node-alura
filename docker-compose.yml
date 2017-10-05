@@ -4,4 +4,16 @@ services:
     build: .
     ports: 
       - "3000:3000"
-    
+    environment:
+      - ENV_DB_HOST=cdc_mysql
+      - ENV_DB_USER=root
+      - ENV_DB_PASSWORD=1234
+      - ENV_DB_DATABASE=cdc
+  mysql:
+    image: mysql
+    container_name: cdc_mysql
+    ports:
+      - "3360:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: "cdc"
