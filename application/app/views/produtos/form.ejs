@@ -3,7 +3,16 @@
 		<title>Novo produto</title>
 	</head>
 	<body>
+
 		<h1>Novo Produto</h1>
+
+		<% if(erros) { %>
+			<ul>
+				<% for(var i = 0; i < erros.length; i++) { %>
+				<li><%= erros[i].param %> - <%= erros[i].msg %></li>
+				<% } %> 
+			</ul>	
+		<% } %>
 
 		<form action="/produtos" method="post">
 			<label for="titulo">Título</label>
