@@ -17,34 +17,34 @@ module.exports = function(app) {
 	});
 
 	app.get("/produtos/form", function(req, res) {
-		res.render('produtos/form', {erros:''})
+		res.render('produtos/form', {erros:{}, produto:{}});
 	});
 
-	app.post('/produtos', function(req, res) {
-		
-		var produto = req.body;
-		console.log(produto);
+		app.post('/produtos', function(req, res) {
+			
+			var produto = req.body;
+			console.log(produto);
 
-		req.assert('titulo', 'Título não pode ser vazio').notEmpty();
-		req.assert('preco', 'Preço precisa ser um decimal').notFloat();
+			req.assert('titulo', 'Título não pode ser vazio').notEmpty();
+			req.assert('preco', 'Preço precisa ser um decimal').isFloat();
 
-		var erros = req.validationErrors();
+			var erros = req.validationErrors();
 
-		if(erros){
-			console.log(erros)
-			res.render('/produtos/form', {erros:erros});
-			return;
-		}
+			if(erros){
+				console.log(erros)
+				res.render('produtos/form', {erros:erros, produto:produto});
+				return;
+			}
 
-		var connection = app.infra.connectionFactory();
-		var produtosDAO = new app.infra.ProdutosDAO(connection);
+			var connection = app.infra.connectionFactory();
+			var produtosDAO = new app.infra.ProdutosDAO(connection);
 
-		produtosDAO.salva(produto,function(err, result){
-			res.redirect('/produtos');
+			produtosDAO.salva(produto,function(err, result){
+				res.redirect('/produtos');
+			});
+
+			connection.end();
 		});
-
-		connection.end();
-	});
 
 }
 
